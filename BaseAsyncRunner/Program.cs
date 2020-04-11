@@ -22,17 +22,13 @@ namespace BaseAsyncRunner
             var container = new StandardKernel(new ConfigureContainer());
             var app = container.Get<ApplicationLogic>();
 
-            //Type[] types = { typeof(AddOptions), typeof(CommitOptions), typeof(CloneOptions) };
-
-            //or collect types using reflection /plugins /Ioc container
+            // Can collect types using reflection /plugins /Ioc container
             //var cmdAssemblies = Assembly.GetExecutingAssembly().GetTypes()
             //    .Where(t => t.GetCustomAttribute<VerbAttribute>() != null).ToArray();
-
-            //var result = Parser.Default.ParseArguments(args, typeof(HeadOptions), typeof(TailOptions))
+            //var result = Parser.Default.ParseArguments(args, cmdAssemblies)
             //    .MapResult(app.Run, HandleParseError).Result;
 
-            // will throw aggregate exception unless we unwrap
-
+            // Will throw aggregate exception unless we unwrap exception
             var result = Parser.Default.ParseArguments<HeadOptions, TailOptions>(args)
                 .MapResult(app.Run, HandleParseError).GetAwaiter().GetResult();
 
