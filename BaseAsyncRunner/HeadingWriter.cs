@@ -1,5 +1,5 @@
-﻿using System;
-using CommandLine.Text;
+﻿using CommandLine.Text;
+using System;
 
 namespace BaseAsyncRunner
 {
@@ -13,7 +13,7 @@ namespace BaseAsyncRunner
         public static void Copyright()
         {
             Console.WriteLine(CopyrightInfo.Default);
-        } 
+        }
 
         public static void Banner(string environment)
         {

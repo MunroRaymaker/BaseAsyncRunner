@@ -1,4 +1,6 @@
-﻿using CommandLine;
+﻿using AutoMapper;
+using BaseAsyncRunner.Domain;
+using CommandLine;
 using Ninject;
 using System;
 using System.Collections.Generic;
@@ -7,9 +9,6 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using AutoMapper;
-using BaseAsyncRunner.Domain;
-using CommandLine.Text;
 
 namespace BaseAsyncRunner
 {
@@ -52,7 +51,7 @@ namespace BaseAsyncRunner
 
         // Instantiates a Singleton of the Semaphore with a value of 1.
         // This means that only one thread can be granted access at a time.
-        private static readonly SemaphoreSlim mutex = new SemaphoreSlim(1,1);
+        private static readonly SemaphoreSlim mutex = new SemaphoreSlim(1, 1);
 
         public ApplicationLogic(ILog log, IConfig config, IMapper mapper)
         {
@@ -87,8 +86,8 @@ namespace BaseAsyncRunner
                             .AppendFormat("{0} from top", head.Lines.HasValue ? " lines" : "bytes");
                         builder.Append(Environment.NewLine);
                         builder.Append(head.Lines.HasValue
-                            ? ReadLines(head.FileName, true, (int) head.Lines)
-                            : ReadBytes(head.FileName, true, (int) head.Bytes));
+                            ? ReadLines(head.FileName, true, (int)head.Lines)
+                            : ReadBytes(head.FileName, true, (int)head.Bytes));
 
                         break;
 
@@ -98,8 +97,8 @@ namespace BaseAsyncRunner
                             .AppendFormat("{0} from top", tail.Lines.HasValue ? " lines" : "bytes");
                         builder.Append(Environment.NewLine);
                         builder.Append(tail.Lines.HasValue
-                            ? ReadLines(tail.FileName, false, (int) tail.Lines)
-                            : ReadBytes(tail.FileName, false, (int) tail.Bytes));
+                            ? ReadLines(tail.FileName, false, (int)tail.Lines)
+                            : ReadBytes(tail.FileName, false, (int)tail.Bytes));
 
                         break;
                 }
@@ -109,7 +108,7 @@ namespace BaseAsyncRunner
                 //int i = 0;
                 //int j = 100 / i;
 
-                var cut = new Customer {FirstName = "John", LastName = "Smith"};
+                var cut = new Customer { FirstName = "John", LastName = "Smith" };
                 var dto = this.mapper.Map<CustomerDto>(cut);
                 Console.WriteLine("Mapped to dto: " + dto.FullName);
             }

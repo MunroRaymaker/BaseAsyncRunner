@@ -20,7 +20,7 @@ namespace BaseAsyncRunner
             Bind<IConfig>().To<Config>().InSingletonScope();
             Bind<IMapper>().ToMethod(AutoMapper).InSingletonScope();
         }
-        
+
         private IMapper AutoMapper(Ninject.Activation.IContext context)
         {
             Mapper.Initialize(config =>
