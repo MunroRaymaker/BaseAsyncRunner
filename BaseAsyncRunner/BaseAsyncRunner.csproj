@@ -59,6 +59,7 @@
     <Compile Include="ConfigureContainer.cs" />
     <Compile Include="Domain\Customer.cs" />
     <Compile Include="Domain\CustomerDto.cs" />
+    <Compile Include="HeadingWriter.cs" />
     <Compile Include="IConfig.cs" />
     <Compile Include="ILog.cs" />
     <Compile Include="Options.cs" />

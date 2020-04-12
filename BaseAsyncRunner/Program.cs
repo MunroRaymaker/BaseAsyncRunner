@@ -17,9 +17,6 @@ namespace BaseAsyncRunner
     {
         public static Task<int> Main(string[] args)
         {
-            Console.WriteLine(HeadingInfo.Default);
-            Console.WriteLine(CopyrightInfo.Default);
-
             var container = new StandardKernel(new ConfigureContainer());
             var app = container.Get<ApplicationLogic>();
 
@@ -41,7 +38,7 @@ namespace BaseAsyncRunner
         {
             //handle errors
             var result = -2;
-            if (errs.Any(x => x is HelpRequestedError || x is VersionRequestedError))
+            if (errs.IsHelp() || errs.IsVersion())
                 result = -1;
             return Task.FromResult(result);
         }
@@ -66,6 +63,10 @@ namespace BaseAsyncRunner
 
         public async Task<int> Run(object options)
         {
+            HeadingWriter.Banner(((IOptions)options)?.Environment);
+            HeadingWriter.Info();
+            HeadingWriter.Copyright();
+
             // Async await to enter the semaphore. If no-one has been granted access to the semaphore,
             // code execution will proceed, otherwise this thread will wait here until the semaphore
             // is released.
