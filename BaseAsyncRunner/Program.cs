@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using CommandLine.Text;
 
 namespace BaseAsyncRunner
 {
@@ -62,9 +63,14 @@ namespace BaseAsyncRunner
 
         public async Task<int> Run(object options)
         {
-            HeadingWriter.Banner(((IOptions)options)?.Environment);
-            HeadingWriter.Info();
-            HeadingWriter.Copyright();
+            HeadingWriter.Banner(((IOptions) options)?.Environment, 
+                HeadingInfo.Default, 
+                "A Basic Console Example",
+                CopyrightInfo.Default, 
+                75,
+                ConsoleColor.Cyan);
+           
+            var profiler = new Profiler("Awaiting semaphore.");
 
             // Async await to enter the semaphore. If no-one has been granted access to the semaphore,
             // code execution will proceed, otherwise this thread will wait here until the semaphore
@@ -72,15 +78,19 @@ namespace BaseAsyncRunner
             await mutex.WaitAsync();
 
             int result = 0;
-            this.log.Write("Quick Start Example!");
+            this.log.Write("Inside main method.");
             var builder = new StringBuilder("Reading ");
             try
             {
-                await Task.Delay(100);
+                profiler.Log("Beginning Quick").Dump();
 
+                await Task.Delay(200);
+                
                 switch (options)
                 {
                     case HeadOptions head:
+
+                        profiler.Log("Getting head.").Dump();
 
                         builder.Append(head.Lines ?? head.Bytes)
                             .AppendFormat("{0} from top", head.Lines.HasValue ? " lines" : "bytes");
@@ -92,6 +102,8 @@ namespace BaseAsyncRunner
                         break;
 
                     case TailOptions tail:
+
+                        profiler.Log("Getting tail.").Dump();
 
                         builder.Append(tail.Lines ?? tail.Bytes)
                             .AppendFormat("{0} from top", tail.Lines.HasValue ? " lines" : "bytes");
@@ -105,12 +117,18 @@ namespace BaseAsyncRunner
 
                 if (builder.Length > 0) Console.WriteLine(builder.ToString());
 
+                profiler.Log("Done.").Dump();
+
                 //int i = 0;
                 //int j = 100 / i;
+
+                profiler.Log("Mapping customer");
 
                 var cut = new Customer { FirstName = "John", LastName = "Smith" };
                 var dto = this.mapper.Map<CustomerDto>(cut);
                 Console.WriteLine("Mapped to dto: " + dto.FullName);
+
+                profiler.Log("Done.");
             }
             catch (Exception ex)
             {
@@ -121,6 +139,8 @@ namespace BaseAsyncRunner
             {
                 // When the task is ready release the semaphore, or it will lock forever.
                 mutex.Release();
+                profiler.Log("Quick All done.").Stop();
+                Console.WriteLine(profiler);
             }
 
             return result;
