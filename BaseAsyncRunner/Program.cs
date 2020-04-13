@@ -38,7 +38,8 @@ namespace BaseAsyncRunner
         {
             //handle errors
             var result = -2;
-            if (errs.IsHelp() || errs.IsVersion())
+            var errors = errs as Error[] ?? errs.ToArray();
+            if (errors.IsHelp() || errors.IsVersion())
                 result = -1;
             return Task.FromResult(result);
         }
@@ -63,13 +64,13 @@ namespace BaseAsyncRunner
 
         public async Task<int> Run(object options)
         {
-            HeadingWriter.Banner(((IOptions) options)?.Environment, 
-                HeadingInfo.Default, 
+            HeadingWriter.Banner(((IOptions)options)?.Environment,
+                HeadingInfo.Default,
                 "A Basic Console Example",
-                CopyrightInfo.Default, 
+                CopyrightInfo.Default,
                 75,
                 ConsoleColor.Cyan);
-           
+
             var profiler = new Profiler("Awaiting semaphore.");
 
             // Async await to enter the semaphore. If no-one has been granted access to the semaphore,

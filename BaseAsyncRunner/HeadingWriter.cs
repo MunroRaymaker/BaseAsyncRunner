@@ -1,16 +1,22 @@
 ﻿using System;
+using System.Reflection;
 
 namespace BaseAsyncRunner
 {
     public class HeadingWriter
     {
-        public static void Banner(string environment, int windowWidth = 55)
+        public static void Banner(string environment)
         {
-            Banner(environment, string.Empty, string.Empty, string.Empty, windowWidth);
+            Banner(environment, string.Empty, string.Empty, string.Empty, 55);
         }
 
-        public static void Banner(string environment, string productName = "", string subTitle = "", string copyright = "", int windowWidth = 55, ConsoleColor foregroundColor = ConsoleColor.Gray)
+        public static void Banner(string environment, string productName, string subTitle = "", string copyright = "", int windowWidth = 55, ConsoleColor foregroundColor = ConsoleColor.Gray)
         {
+            if (string.IsNullOrEmpty(productName))
+            {
+                productName = Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyTitleAttribute>().Title;
+            }
+
             Console.Title = $"{productName}{(string.IsNullOrEmpty(subTitle) ? "" : " -  " + subTitle)}";
 
             Console.ForegroundColor = foregroundColor;
