@@ -56,7 +56,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ConfigureContainer.cs" />
+    <Compile Include="ApplicationLogic.cs" />
+    <Compile Include="Bootstrapper.cs" />
     <Compile Include="Domain\Customer.cs" />
     <Compile Include="Domain\CustomerDto.cs" />
     <Compile Include="HeadingWriter.cs" />
